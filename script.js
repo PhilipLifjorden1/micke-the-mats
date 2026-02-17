@@ -36,3 +36,36 @@ form.addEventListener('submit', async (e) => {
     alert('Något gick fel. Försök igen.');
   }
 });
+
+const form = document.getElementById("bookingForm");
+const statusEl = document.getElementById("formStatus");
+
+if (form) {
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    statusEl.textContent = "Skickar...";
+
+    const formData = new FormData(form);
+    const payload = Object.fromEntries(formData.entries());
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        statusEl.textContent = "Något gick fel. Testa igen.";
+        return;
+      }
+
+      statusEl.textContent = "Tack! Förfrågan skickad ✅";
+      form.reset();
+    } catch (err) {
+      statusEl.textContent = "Nätverksfel. Testa igen.";
+    }
+  });
+}
