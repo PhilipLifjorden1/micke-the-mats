@@ -305,15 +305,22 @@ textarea{min-height:120px}
   color:#777;
 }
 
+/* Reveal: sidan ska aldrig bli blank om JS failar */
 .reveal{
-  opacity:0;
-  transform:translateY(30px);
-  transition:.8s ease;
+  opacity: 1;
+  transform: none;
 }
 
-.reveal.show{
-  opacity:1;
-  transform:none;
+/* Reveal-animation används bara när JS är igång */
+.js .reveal{
+  opacity: 0;
+  transform: translateY(30px);
+  transition: .8s ease;
+}
+
+.js .reveal.show{
+  opacity: 1;
+  transform: none;
 }
 /* ===== ABOUT SECTION ===== */
 
@@ -449,3 +456,91 @@ textarea{min-height:120px}
   .gallery-grid{ grid-template-columns: 1fr; }
   .gallery-card img{ height:280px; }
 }
+
+
+/* ===== Premium expandable cards ===== */
+
+.cards .card.expandable{
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transform: translateZ(0);
+}
+
+/* glow “följer musen” via CSS-variabler */
+.cards .card.expandable::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  background: radial-gradient(
+    420px 240px at var(--mx, 50%) var(--my, 50%),
+    rgba(255,45,85,.22),
+    transparent 55%
+  );
+  opacity: 0;
+  transition: opacity .12s ease;
+  pointer-events:none;
+}
+
+.cards .card.expandable::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: linear-gradient(180deg, rgba(255,255,255,.06), transparent 40%);
+  opacity: .25;
+  pointer-events:none;
+}
+
+.cards .card-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:8px;
+}
+
+.cards .card.expandable .chev{
+  font-weight:900;
+  font-size: 22px;
+  line-height: 1;
+  opacity: .8;
+  transition: transform .18s ease, opacity .18s ease;
+}
+
+/* snabba, responsiva hover-effekter */
+.cards .card.expandable:hover{
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 35px 90px rgba(0,0,0,.55), 0 18px 60px rgba(225,29,72,.22);
+}
+.cards .card.expandable:hover::before{
+  opacity: 1;
+}
+.cards .card.expandable:hover .chev{
+  opacity: 1;
+}
+
+/* “more” = expanderar kortet (ingen overlay, ingen scroll) */
+.cards .card-more{
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: max-height .22s ease, opacity .18s ease, transform .18s ease;
+  margin-top: 10px;
+  border-top: 1px solid rgba(255,255,255,.08);
+  padding-top: 0;
+}
+
+.cards .card.expandable.open .card-more{
+  max-height: 420px; /* öka om du vill ha mer plats */
+  opacity: 1;
+  transform: none;
+  padding-top: 14px;
+}
+
+/* snyggare ikon vid öppet */
+.cards .card.expandable.open .chev{
+  transform: rotate(45deg);
+}
+
+

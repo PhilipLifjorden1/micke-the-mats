@@ -29,7 +29,7 @@ export default async function handler(req, res) {
 
     // NOTE: Resend requires a verified "from" domain/email.
     // If you haven't set up a domain yet, Resend usually provides an onboarding sender.
-    const from = "Micke & The Mats <onboarding@resend.dev>";
+    const from = "Micke & The Mats <info@mickeandthemats.se>";
 
     const result = await resend.emails.send({
       from,

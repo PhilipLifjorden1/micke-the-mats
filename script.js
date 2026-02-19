@@ -1,6 +1,7 @@
 // 1) Footer year (safe)
 const yearEl = document.getElementById("year");
 if (yearEl) yearEl.textContent = new Date().getFullYear();
+document.documentElement.classList.add("js");
 
 // 2) Reveal animations
 const reveals = document.querySelectorAll(".reveal");
@@ -52,3 +53,25 @@ if (form) {
     }
   });
 }
+
+// 4) Cards: click one -> open ALL, click again -> close ALL
+const cards = document.querySelectorAll(".card.expandable");
+
+let allOpen = false;
+
+cards.forEach((card) => {
+  // glow follow (keep)
+  card.addEventListener("mousemove", (e) => {
+    const r = card.getBoundingClientRect();
+    const x = ((e.clientX - r.left) / r.width) * 100;
+    const y = ((e.clientY - r.top) / r.height) * 100;
+    card.style.setProperty("--mx", `${x}%`);
+    card.style.setProperty("--my", `${y}%`);
+  });
+
+  card.addEventListener("click", () => {
+    allOpen = !allOpen;
+    cards.forEach((c) => c.classList.toggle("open", allOpen));
+  });
+});
+
