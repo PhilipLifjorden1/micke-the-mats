@@ -472,6 +472,14 @@ textarea{min-height:120px}
     padding: 0 16px;
   }
 
+  .hero-text{
+  order: 2;
+}
+
+.hero-logo{
+  order: 1;
+}
+
   /* NAV: stapla och gör knappar mindre */
   .nav-inner{
     flex-direction: column;
