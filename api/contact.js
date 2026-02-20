@@ -16,7 +16,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
-    const toEmail = process.env.CONTACT_TO_EMAIL || "philip.lifjorden@gmail.com";
+    const toEmail = process.env.CONTACT_TO_EMAIL || "mikaellifjorden@gmail.com";
 
     const subject = `Ny bokningsförfrågan: ${name} (${date})`;
     const text = [
