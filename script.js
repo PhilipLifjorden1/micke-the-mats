@@ -75,3 +75,29 @@ cards.forEach((card) => {
   });
 });
 
+
+// Call modal
+const openCall = document.getElementById("openCall");
+const callModal = document.getElementById("callModal");
+const closeCall = document.getElementById("closeCall");
+const closeCallX = document.getElementById("closeCallX");
+
+function openModal() {
+  callModal.classList.add("show");
+  callModal.setAttribute("aria-hidden", "false");
+}
+
+function closeModal() {
+  callModal.classList.remove("show");
+  callModal.setAttribute("aria-hidden", "true");
+}
+
+if (openCall && callModal) {
+  openCall.addEventListener("click", openModal);
+  closeCall?.addEventListener("click", closeModal);
+  closeCallX?.addEventListener("click", closeModal);
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeModal();
+  });
+}

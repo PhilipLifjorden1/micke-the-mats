@@ -19,7 +19,7 @@
   <div class="container nav-inner">
    <div class="logo">
   <img src="logo.png" alt="Micke & The Mats" class="logo-img" />
-  <a class="phone" href="tel:+46706671818">0706-671818
+  <button class="call-btn" type="button" id="openCall">Ring oss</button>
   </a>
 </div>
     <nav>
@@ -180,6 +180,28 @@
   </div>
 </footer>
 
+<div class="modal" id="callModal" aria-hidden="true">
+  <div class="modal-backdrop" id="closeCall"></div>
+
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="callTitle">
+    <div class="modal-head">
+      <h3 id="callTitle">Ring oss</h3>
+      <button class="modal-x" id="closeCallX" aria-label="Stäng">✕</button>
+    </div>
+
+    <div class="modal-list">
+      <a class="contact-row" href="tel:+46706671818">
+        <span class="who">Mikael</span>
+        <span class="num">0706-671818</span>
+      </a>
+
+      <a class="contact-row" href="tel:+46709829285">
+        <span class="who">Mats</span>
+        <span class="num">0709-829285</span>
+      </a>
+    </div>
+  </div>
+</div>
 <script src="script.js"></script>
 </body>
 </html>
