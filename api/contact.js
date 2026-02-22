@@ -3,44 +3,58 @@ import { Resend } from "resend";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export default async function handler(req, res) {
-  // Only allow POST
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
-    const { name, contact, date, city, message } = req.body || {};
+    const { name, phone, email, date, city, message } = req.body || {};
 
-    // Basic validation
-    if (!name || !contact || !date || !city) {
+    if (!name || !phone || !email || !date || !city) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
-    const toEmail = process.env.CONTACT_TO_EMAIL || "mikaellifjorden@gmail.com";
+    const toEmail =
+      process.env.CONTACT_TO_EMAIL || "mikaellifjorden@gmail.com";
 
-    const subject = `Ny bokningsförfrågan: ${name} (${date})`;
-    const text = [
-      `Namn: ${name}`,
-      `Kontakt: ${contact}`,
-      `Datum: ${date}`,
-      `Plats/Stad: ${city}`,
-      `Meddelande: ${message || "(inget)"}`,
-    ].join("\n");
+    const replyLink = `mailto:${email}?subject=${encodeURIComponent(
+      `Angående bokning ${date}`
+    )}`;
 
-    // NOTE: Resend requires a verified "from" domain/email.
-    // If you haven't set up a domain yet, Resend usually provides an onboarding sender.
     const from = "Micke & The Mats <info@mickeandthemats.se>";
 
-    const result = await resend.emails.send({
+    await resend.emails.send({
       from,
       to: toEmail,
-      subject,
-      text,
+      subject: `Ny bokningsförfrågan: ${name} (${date})`,
+      html: `
+        <h2>Ny bokningsförfrågan</h2>
+        <p><strong>Namn:</strong> ${name}</p>
+        <p><strong>Telefon:</strong> ${phone}</p>
+        <p><strong>E-post:</strong> <a href="mailto:${email}">${email}</a></p>
+        <p><strong>Datum:</strong> ${date}</p>
+        <p><strong>Plats/Stad:</strong> ${city}</p>
+        <p><strong>Meddelande:</strong><br/>${(message || "(inget)").replace(/\n/g,"<br/>")}</p>
+        <hr/>
+        <p>
+          <a href="${replyLink}" style="
+            display:inline-block;
+            padding:12px 16px;
+            border-radius:12px;
+            background:#ff2d55;
+            color:white;
+            text-decoration:none;
+            font-weight:800;
+          ">
+            Svara kund
+          </a>
+        </p>
+      `,
     });
 
-    return res.status(200).json({ ok: true, result });
+    return res.status(200).json({ ok: true });
   } catch (err) {
-    console.error(err);
+    console.error("Email error:", err);
     return res.status(500).json({ error: "Failed to send email" });
   }
 }
